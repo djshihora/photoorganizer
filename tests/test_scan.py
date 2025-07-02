@@ -12,6 +12,8 @@ def test_scan_folder(tmp_path):
     assert isinstance(metadata[0]["exif"], dict)
     assert "faces" in metadata[0]
     assert isinstance(metadata[0]["faces"], list)
+    assert "category" in metadata[0]
+    assert isinstance(metadata[0]["category"], str)
 
 
 def test_extract_exif_invalid_gps():

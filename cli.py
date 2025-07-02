@@ -22,6 +22,10 @@ def main(args: list[str] | None = None) -> int:
     folder = ns.folder or pick_folder()
     print(f"Scanning {folder}...")
     metadata = scan_folder(folder)
+    # ensure every entry contains a category so downstream steps
+    # like database insertion and tests can rely on this key
+    for entry in metadata:
+        entry.setdefault("category", "other")
     cluster_faces(metadata)
     conn = init_db(ns.db)
     insert_metadata(conn, metadata)
