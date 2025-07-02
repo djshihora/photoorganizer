@@ -24,4 +24,3 @@ def test_cluster_faces_assigns_ids():
         for face in entry["faces"]:
             assert "cluster_id" in face
             assert isinstance(face["cluster_id"], int)
-

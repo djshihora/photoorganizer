@@ -8,7 +8,11 @@ import numpy as np
 from sklearn.cluster import DBSCAN
 
 
-def cluster_faces(metadata: List[Dict[str, Any]], eps: float = 0.5, min_samples: int = 3) -> List[Dict[str, Any]]:
+def cluster_faces(
+    metadata: List[Dict[str, Any]],
+    eps: float = 0.5,
+    min_samples: int = 3,
+) -> List[Dict[str, Any]]:
     """Assign cluster labels to faces across *metadata*.
 
     This iterates over all face embeddings, performs DBSCAN clustering,
