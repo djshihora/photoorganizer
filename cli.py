@@ -1,4 +1,5 @@
 """CLI entry point for photo organizer."""
+
 from __future__ import annotations
 
 import argparse
@@ -11,7 +12,9 @@ from photo_organizer.picker import pick_folder
 def main(args: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Photo Organizer CLI")
     parser.add_argument("folder", nargs="?", help="Folder to scan for photos")
-    parser.add_argument("--db", default="photo.db", help="SQLite database path")
+    parser.add_argument(
+        "--db", default="photo.db", help="SQLite database path"
+    )
 
     ns = parser.parse_args(args)
 

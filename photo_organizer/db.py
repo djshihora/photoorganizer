@@ -1,4 +1,5 @@
 """SQLite database utilities for photo organizer."""
+
 from __future__ import annotations
 
 import sqlite3
@@ -22,13 +23,16 @@ def init_db(path: str = "photo.db") -> sqlite3.Connection:
     return conn
 
 
-def insert_metadata(conn: sqlite3.Connection, metadata: Iterable[Dict[str, str]]) -> None:
+def insert_metadata(
+    conn: sqlite3.Connection, metadata: Iterable[Dict[str, str]]
+) -> None:
     """Insert scanned metadata into the database."""
     with conn:
         for entry in metadata:
             conn.execute(
                 "INSERT OR REPLACE INTO photos(path, metadata) VALUES (?, ?)",
-                (entry["path"], json.dumps(entry["exif"]))
+                (entry["path"], json.dumps(entry["exif"])),
             )
+
 
 __all__ = ["init_db", "insert_metadata"]

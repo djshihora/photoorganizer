@@ -1,4 +1,5 @@
 """Folder picker utilities using Tkinter."""
+
 from __future__ import annotations
 
 from tkinter import Tk, filedialog
@@ -13,5 +14,6 @@ def pick_folder() -> str:
     if not folder:
         raise FileNotFoundError("No folder selected")
     return folder
+
 
 __all__ = ["pick_folder"]

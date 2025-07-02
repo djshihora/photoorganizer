@@ -1,4 +1,5 @@
 """Face detection and embedding utilities."""
+
 from __future__ import annotations
 
 import os
@@ -11,7 +12,9 @@ import mediapipe as mp
 
 
 # Initialize MediaPipe face detector
-_mp_face_detection = mp.solutions.face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.5)
+_mp_face_detection = mp.solutions.face_detection.FaceDetection(
+    model_selection=0, min_detection_confidence=0.5
+)
 
 
 class FaceEmbedder:
@@ -19,9 +22,13 @@ class FaceEmbedder:
 
     def __init__(self, model_path: str | None = None) -> None:
         if model_path is None:
-            model_path = os.path.join(os.path.dirname(__file__), "facenet_dummy.onnx")
+            model_path = os.path.join(
+                os.path.dirname(__file__), "facenet_dummy.onnx"
+            )
         try:
-            self.session = ort.InferenceSession(model_path, providers=["CPUExecutionProvider"])
+            self.session = ort.InferenceSession(
+                model_path, providers=["CPUExecutionProvider"]
+            )
             self.input_name = self.session.get_inputs()[0].name
         except Exception:
             self.session = None
@@ -41,6 +48,7 @@ class FaceEmbedder:
 
 
 _embedder: FaceEmbedder | None = None
+
 
 def load_embedder(model_path: str | None = None) -> FaceEmbedder:
     global _embedder
@@ -69,7 +77,9 @@ def detect_faces(img: Image.Image) -> List[Tuple[int, int, int, int]]:
     return boxes
 
 
-def extract_face(img: Image.Image, box: Tuple[int, int, int, int]) -> Image.Image:
+def extract_face(
+    img: Image.Image, box: Tuple[int, int, int, int]
+) -> Image.Image:
     x1, y1, x2, y2 = box
     return img.crop((x1, y1, x2, y2))
 
