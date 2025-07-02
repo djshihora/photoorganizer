@@ -1,5 +1,5 @@
-from photo_organizer.scan import scan_folder, find_images, _extract_exif
 from PIL import Image
+from photo_organizer.scan import scan_folder, find_images, _extract_exif
 
 
 def test_scan_folder(tmp_path):
