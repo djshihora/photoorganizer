@@ -5,6 +5,7 @@ import os
 from fractions import Fraction
 from typing import Dict, Iterable, List, Tuple
 from PIL import Image, ExifTags
+from .face import detect_faces, extract_face, load_embedder
 
 
 def _gps_to_decimal(coords: Tuple[Fraction, Fraction, Fraction], ref: str) -> float | None:
@@ -75,15 +76,23 @@ def find_images(folder: str, extensions: Iterable[str] | None = None) -> List[st
 def scan_folder(folder: str) -> List[Dict[str, str]]:
     """Scan folder for images and return metadata list."""
     metadata: List[Dict[str, str]] = []
+    embedder = load_embedder()
     for path in find_images(folder):
+        faces_info = []
         try:
             with Image.open(path) as img:
                 exif = _extract_exif(img)
+                boxes = detect_faces(img)
+                for box in boxes:
+                    face_img = extract_face(img, box)
+                    embedding = embedder(face_img).astype(float).tolist()
+                    faces_info.append({"box": list(box), "embedding": embedding})
         except Exception:
             exif = {}
         entry = {
             "path": path,
             "exif": exif,
+             "faces": faces_info,
         }
         metadata.append(entry)
     return metadata
