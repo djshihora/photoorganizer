@@ -63,6 +63,9 @@ def detect_faces(img: Image.Image) -> List[Tuple[int, int, int, int]]:
             x2 = int((bbox.xmin + bbox.width) * w)
             y2 = int((bbox.ymin + bbox.height) * h)
             boxes.append((x1, y1, x2, y2))
+     if not boxes:
+        w, h = img.size
+        boxes.append((0, 0, w, h))
     return boxes
 
 
