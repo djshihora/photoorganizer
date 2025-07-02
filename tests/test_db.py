@@ -10,6 +10,7 @@ def test_insert_and_retrieve_metadata(tmp_path):
         "path": str(img_path),
         "exif": {"key": "value"},
         "faces": [],
+        "category": "other",
     }
     conn = init_db(str(tmp_path / "photo.db"))
     insert_metadata(conn, [entry])
@@ -39,8 +40,18 @@ def test_insert_metadata_multiple(tmp_path):
     db_file = tmp_path / "db.sqlite"
     conn = init_db(str(db_file))
     entries = [
-        {"path": str(img1), "exif": {"n": "1"}, "faces": []},
-        {"path": str(img2), "exif": {"n": "2"}, "faces": []},
+        {
+            "path": str(img1),
+            "exif": {"n": "1"},
+            "faces": [],
+            "category": "other",
+        },
+        {
+            "path": str(img2),
+            "exif": {"n": "2"},
+            "faces": [],
+            "category": "other",
+        },
     ]
     insert_metadata(conn, entries)
     rows = list(conn.execute("SELECT path FROM photos ORDER BY path"))

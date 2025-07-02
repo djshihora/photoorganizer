@@ -17,3 +17,5 @@ def test_cli_main(tmp_path):
     meta = json.loads(row[0])
     assert meta["faces"]
     assert "cluster_id" in meta["faces"][0]
+    assert "category" in meta
+    assert isinstance(meta["category"], str)
