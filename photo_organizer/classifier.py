@@ -77,7 +77,11 @@ def classify_image(img: Image.Image) -> str:
     if _classifier is None:
         load_classifier()
 
-    if _classifier is not None and transforms is not None and torch is not None:
+    if (
+        _classifier is not None
+        and transforms is not None
+        and torch is not None
+    ):
         try:  # pragma: no cover - runtime inference
             tensor = _transform(img).unsqueeze(0)
             with torch.no_grad():

@@ -23,8 +23,6 @@ except Exception:  # pragma: no cover - handled gracefully
     _mp_face_detection = None
 
 
-
-
 class FaceEmbedder:
     """Wrapper around an ONNX FaceNet model."""
 
