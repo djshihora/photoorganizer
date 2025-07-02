@@ -20,7 +20,7 @@ class FaceEmbedder:
     def __init__(self, model_path: str | None = None) -> None:
         if model_path is None:
             model_path = os.path.join(os.path.dirname(__file__), "facenet_dummy.onnx")
-       try:
+        try:
             self.session = ort.InferenceSession(model_path, providers=["CPUExecutionProvider"])
             self.input_name = self.session.get_inputs()[0].name
         except Exception:
@@ -63,7 +63,7 @@ def detect_faces(img: Image.Image) -> List[Tuple[int, int, int, int]]:
             x2 = int((bbox.xmin + bbox.width) * w)
             y2 = int((bbox.ymin + bbox.height) * h)
             boxes.append((x1, y1, x2, y2))
-     if not boxes:
+    if not boxes:
         w, h = img.size
         boxes.append((0, 0, w, h))
     return boxes
