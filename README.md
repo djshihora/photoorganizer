@@ -15,6 +15,13 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+OCR features require the system `tesseract` executable. Install it with:
+
+```bash
+sudo apt-get install tesseract-ocr  # Ubuntu
+brew install tesseract              # macOS (Homebrew)
+```
+
 Run the scanner:
 
 ```bash
