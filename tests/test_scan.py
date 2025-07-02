@@ -17,6 +17,7 @@ def test_scan_folder(tmp_path):
     assert "category" in metadata[0]
     assert isinstance(metadata[0]["category"], str)
     assert metadata[0]["category"] in ALLOWED
+    assert "ocr_text" in metadata[0]
 
 
 def test_extract_exif_invalid_gps():

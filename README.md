@@ -21,7 +21,9 @@ Run the scanner:
 python cli.py /path/to/photos --db photo.db
 ```
 The resulting metadata stored in the database includes a `category` field for
-each image describing its type.
+each image describing its type. If an image is classified as a document or ID,
+the text content is extracted using Tesseract (when available) and stored under
+the `ocr_text` key.
 
 ## Testing
 
