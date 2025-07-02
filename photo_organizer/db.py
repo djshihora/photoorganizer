@@ -28,7 +28,7 @@ def insert_metadata(conn: sqlite3.Connection, metadata: Iterable[Dict[str, str]]
         for entry in metadata:
             conn.execute(
                 "INSERT OR REPLACE INTO photos(path, metadata) VALUES (?, ?)",
-                (entry["path"], str(entry["exif"]))
+                (entry["path"], json.dumps(entry["exif"]))
             )
 
 __all__ = ["init_db", "insert_metadata"]
