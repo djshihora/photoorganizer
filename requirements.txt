@@ -2,3 +2,4 @@ Pillow
 mediapipe
 onnxruntime
 numpy
+scikit-learn

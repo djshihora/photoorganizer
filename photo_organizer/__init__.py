@@ -2,6 +2,6 @@
 
 __version__ = "0.1.0"
 
-from . import scan, db, picker
+from . import scan, db, picker, cluster
 
-__all__ = ["scan", "db", "picker", "__version__"]
+__all__ = ["scan", "db", "picker", "cluster", "__version__"]

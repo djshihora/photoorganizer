@@ -6,7 +6,11 @@ from photo_organizer.db import init_db, insert_metadata
 def test_insert_and_retrieve_metadata(tmp_path):
     img_path = tmp_path / "img.jpg"
     Image.new("RGB", (5, 5)).save(img_path)
-    entry = {"path": str(img_path), "exif": {"key": "value"}}
+    entry = {
+        "path": str(img_path),
+        "exif": {"key": "value"},
+        "faces": [],
+    }
     conn = init_db(str(tmp_path / "photo.db"))
     insert_metadata(conn, [entry])
     row = conn.execute(
@@ -14,7 +18,7 @@ def test_insert_and_retrieve_metadata(tmp_path):
     ).fetchone()
     assert row is not None
     meta = json.loads(row[0])
-    assert meta == entry["exif"]
+    assert meta == entry
 
 
 def test_init_db_creates_table(tmp_path):
@@ -35,8 +39,8 @@ def test_insert_metadata_multiple(tmp_path):
     db_file = tmp_path / "db.sqlite"
     conn = init_db(str(db_file))
     entries = [
-        {"path": str(img1), "exif": {"n": "1"}},
-        {"path": str(img2), "exif": {"n": "2"}},
+        {"path": str(img1), "exif": {"n": "1"}, "faces": []},
+        {"path": str(img2), "exif": {"n": "2"}, "faces": []},
     ]
     insert_metadata(conn, entries)
     rows = list(conn.execute("SELECT path FROM photos ORDER BY path"))

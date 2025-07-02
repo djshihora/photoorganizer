@@ -1,4 +1,5 @@
 from PIL import Image
+import json
 from cli import main
 from photo_organizer.db import init_db
 
@@ -11,5 +12,8 @@ def test_cli_main(tmp_path):
     ret = main([str(tmp_path), "--db", str(db_path)])
     assert ret == 0
     conn = init_db(str(db_path))
-    count = conn.execute("SELECT COUNT(*) FROM photos").fetchone()[0]
-    assert count == 1
+    row = conn.execute("SELECT metadata FROM photos").fetchone()
+    assert row is not None
+    meta = json.loads(row[0])
+    assert meta["faces"]
+    assert "cluster_id" in meta["faces"][0]
