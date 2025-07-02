@@ -7,10 +7,10 @@ def test_ocr_text_extraction(monkeypatch, tmp_path):
     Image.new("RGB", (10, 10)).save(img_path)
 
     monkeypatch.setattr(
-        "photo_organizer.classifier.classify_image", lambda img: "document"
+        "photo_organizer.scan.classify_image", lambda img: "document"
     )
     monkeypatch.setattr(
-        "photo_organizer.ocr.extract_text", lambda img: "hello"
+        "photo_organizer.scan.extract_text", lambda img: "hello"
     )
 
     meta = scan_folder(str(tmp_path))
