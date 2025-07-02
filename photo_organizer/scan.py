@@ -8,6 +8,7 @@ from typing import Dict, Iterable, List, Tuple
 from PIL import Image, ExifTags
 from .face import detect_faces, extract_face, load_embedder
 from .classifier import classify_image
+from .ocr import extract_text
 
 
 def _gps_to_decimal(
@@ -94,10 +95,13 @@ def scan_folder(folder: str) -> List[Dict[str, str]]:
     for path in find_images(folder):
         faces_info = []
         category = "other"
+        text = ""
         try:
             with Image.open(path) as img:
                 exif = _extract_exif(img)
                 category = classify_image(img)
+                if category in {"document", "id"}:
+                    text = extract_text(img)
                 boxes = detect_faces(img)
                 for box in boxes:
                     face_img = extract_face(img, box)
@@ -112,6 +116,7 @@ def scan_folder(folder: str) -> List[Dict[str, str]]:
             "exif": exif,
             "faces": faces_info,
             "category": category,
+            "ocr_text": text,
         }
         metadata.append(entry)
     return metadata
