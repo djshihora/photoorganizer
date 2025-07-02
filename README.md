@@ -20,3 +20,8 @@ Run the scanner:
 ```bash
 python cli.py /path/to/photos --db photo.db
 ```
+
+## Testing
+
+The test suite relies only on images generated at runtime. No external image
+files are required.
