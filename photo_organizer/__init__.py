@@ -1,5 +1,5 @@
 """Top-level package for photo_organizer."""
 
-from . import scan, db
+from . import scan, db, picker
 
-__all__ = ["scan", "db"]
+__all__ = ["scan", "db", "picker"]
