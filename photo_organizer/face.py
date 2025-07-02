@@ -20,8 +20,12 @@ class FaceEmbedder:
     def __init__(self, model_path: str | None = None) -> None:
         if model_path is None:
             model_path = os.path.join(os.path.dirname(__file__), "facenet_dummy.onnx")
-        self.session = ort.InferenceSession(model_path, providers=["CPUExecutionProvider"])
-        self.input_name = self.session.get_inputs()[0].name
+       try:
+            self.session = ort.InferenceSession(model_path, providers=["CPUExecutionProvider"])
+            self.input_name = self.session.get_inputs()[0].name
+        except Exception:
+            self.session = None
+            self.input_name = None
 
     def __call__(self, face: Image.Image) -> np.ndarray:
         """Return embedding for a face image."""
