@@ -3,3 +3,5 @@ mediapipe
 onnxruntime
 numpy
 scikit-learn
+torch
+torchvision

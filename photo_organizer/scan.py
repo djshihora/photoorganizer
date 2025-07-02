@@ -7,6 +7,7 @@ from fractions import Fraction
 from typing import Dict, Iterable, List, Tuple
 from PIL import Image, ExifTags
 from .face import detect_faces, extract_face, load_embedder
+from .classifier import classify_image
 
 
 def _gps_to_decimal(
@@ -92,9 +93,11 @@ def scan_folder(folder: str) -> List[Dict[str, str]]:
     embedder = load_embedder()
     for path in find_images(folder):
         faces_info = []
+        category = "other"
         try:
             with Image.open(path) as img:
                 exif = _extract_exif(img)
+                category = classify_image(img)
                 boxes = detect_faces(img)
                 for box in boxes:
                     face_img = extract_face(img, box)
@@ -108,6 +111,7 @@ def scan_folder(folder: str) -> List[Dict[str, str]]:
             "path": path,
             "exif": exif,
             "faces": faces_info,
+            "category": category,
         }
         metadata.append(entry)
     return metadata

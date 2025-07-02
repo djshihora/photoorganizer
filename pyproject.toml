@@ -14,6 +14,8 @@ dependencies = [
     "onnxruntime",
     "numpy",
     "scikit-learn",
+    "torch",
+    "torchvision",
 ]
 
 [project.scripts]
