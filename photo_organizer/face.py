@@ -34,6 +34,8 @@ class FaceEmbedder:
         if arr.ndim == 2:
             arr = np.stack([arr] * 3, axis=-1)
         arr = arr.transpose(2, 0, 1)[None, ...]
+        if self.session is None:
+            return np.zeros(128, dtype=np.float32)
         result = self.session.run(None, {self.input_name: arr})[0]
         return result.squeeze()
 
