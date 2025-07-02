@@ -1,11 +1,6 @@
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-
-import json  # noqa: E402
-from PIL import Image  # noqa: E402
-from photo_organizer.db import init_db, insert_metadata  # noqa: E402
+import json
+from PIL import Image
+from photo_organizer.db import init_db, insert_metadata
 
 
 def test_insert_and_retrieve_metadata(tmp_path):
