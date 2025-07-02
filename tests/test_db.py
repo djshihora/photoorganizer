@@ -15,3 +15,29 @@ def test_insert_and_retrieve_metadata(tmp_path):
     assert row is not None
     meta = json.loads(row[0])
     assert meta == entry["exif"]
+
+
+def test_init_db_creates_table(tmp_path):
+    db_file = tmp_path / "db.sqlite"
+    conn = init_db(str(db_file))
+    assert db_file.exists()
+    row = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='photos'"
+    ).fetchone()
+    assert row is not None
+
+
+def test_insert_metadata_multiple(tmp_path):
+    img1 = tmp_path / "a.jpg"
+    img2 = tmp_path / "b.jpg"
+    Image.new("RGB", (5, 5)).save(img1)
+    Image.new("RGB", (5, 5)).save(img2)
+    db_file = tmp_path / "db.sqlite"
+    conn = init_db(str(db_file))
+    entries = [
+        {"path": str(img1), "exif": {"n": "1"}},
+        {"path": str(img2), "exif": {"n": "2"}},
+    ]
+    insert_metadata(conn, entries)
+    rows = list(conn.execute("SELECT path FROM photos ORDER BY path"))
+    assert [r[0] for r in rows] == [str(img1), str(img2)]
