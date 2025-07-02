@@ -3,6 +3,8 @@ import json
 from cli import main
 from photo_organizer.db import init_db
 
+ALLOWED = {"selfie", "document", "screenshot", "nature", "other"}
+
 
 def test_cli_main(tmp_path):
     img = Image.new("RGB", (5, 5))
@@ -19,3 +21,4 @@ def test_cli_main(tmp_path):
     assert "cluster_id" in meta["faces"][0]
     assert "category" in meta
     assert isinstance(meta["category"], str)
+    assert meta["category"] in ALLOWED

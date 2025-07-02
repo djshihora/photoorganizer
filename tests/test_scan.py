@@ -1,6 +1,8 @@
 from PIL import Image
 from photo_organizer.scan import scan_folder, find_images, _extract_exif
 
+ALLOWED = {"selfie", "document", "screenshot", "nature", "other"}
+
 
 def test_scan_folder(tmp_path):
     img_path = tmp_path / "image.jpg"
@@ -14,6 +16,7 @@ def test_scan_folder(tmp_path):
     assert isinstance(metadata[0]["faces"], list)
     assert "category" in metadata[0]
     assert isinstance(metadata[0]["category"], str)
+    assert metadata[0]["category"] in ALLOWED
 
 
 def test_extract_exif_invalid_gps():
