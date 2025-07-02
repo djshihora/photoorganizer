@@ -13,6 +13,7 @@ dependencies = [
     "mediapipe",
     "onnxruntime",
     "numpy",
+    "scikit-learn",
 ]
 
 [project.scripts]

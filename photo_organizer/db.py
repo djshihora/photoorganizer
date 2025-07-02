@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sqlite3
 import json
-from typing import Dict, Iterable
+from typing import Dict, Iterable, Any
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS photos (
@@ -24,14 +24,14 @@ def init_db(path: str = "photo.db") -> sqlite3.Connection:
 
 
 def insert_metadata(
-    conn: sqlite3.Connection, metadata: Iterable[Dict[str, str]]
+    conn: sqlite3.Connection, metadata: Iterable[Dict[str, Any]]
 ) -> None:
     """Insert scanned metadata into the database."""
     with conn:
         for entry in metadata:
             conn.execute(
                 "INSERT OR REPLACE INTO photos(path, metadata) VALUES (?, ?)",
-                (entry["path"], json.dumps(entry["exif"])),
+                (entry["path"], json.dumps(entry)),
             )
 
 

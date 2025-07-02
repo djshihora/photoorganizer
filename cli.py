@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 
 from photo_organizer.scan import scan_folder
+from photo_organizer.cluster import cluster_faces
 from photo_organizer.db import init_db, insert_metadata
 from photo_organizer.picker import pick_folder
 
@@ -21,6 +22,7 @@ def main(args: list[str] | None = None) -> int:
     folder = ns.folder or pick_folder()
     print(f"Scanning {folder}...")
     metadata = scan_folder(folder)
+    cluster_faces(metadata)
     conn = init_db(ns.db)
     insert_metadata(conn, metadata)
     print(f"Inserted {len(metadata)} records into {ns.db}")
