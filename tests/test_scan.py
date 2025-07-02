@@ -1,9 +1,10 @@
 import sys
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from photo_organizer.scan import scan_folder
-from PIL import Image
+from photo_organizer.scan import scan_folder  # noqa: E402
+from PIL import Image  # noqa: E402
 
 
 def test_scan_folder(tmp_path):

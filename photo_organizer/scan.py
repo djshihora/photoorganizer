@@ -1,4 +1,5 @@
 """Scanning utilities for photo organizer."""
+
 from __future__ import annotations
 
 import os
@@ -8,7 +9,9 @@ from PIL import Image, ExifTags
 from .face import detect_faces, extract_face, load_embedder
 
 
-def _gps_to_decimal(coords: Tuple[Fraction, Fraction, Fraction], ref: str) -> float | None:
+def _gps_to_decimal(
+    coords: Tuple[Fraction, Fraction, Fraction], ref: str
+) -> float | None:
     """Convert GPS coordinates to decimal degrees."""
     try:
         d, m, s = [float(x) for x in coords]
@@ -28,7 +31,10 @@ def _extract_exif(image: Image.Image) -> Dict[str, str]:
     gps_raw = None
     for tag_id, value in info.items():
         tag = ExifTags.TAGS.get(tag_id, tag_id)
-        if tag in {"DateTimeOriginal", "DateTime"} and "timestamp" not in exif_data:
+        if (
+            tag in {"DateTimeOriginal", "DateTime"}
+            and "timestamp" not in exif_data
+        ):
             exif_data["timestamp"] = str(value)
         elif tag == "Make":
             exif_data["camera_make"] = str(value)
@@ -38,7 +44,9 @@ def _extract_exif(image: Image.Image) -> Dict[str, str]:
             gps_raw = value
 
     if gps_raw:
-        gps_parsed = {ExifTags.GPSTAGS.get(k, k): v for k, v in gps_raw.items()}
+        gps_parsed = {
+            ExifTags.GPSTAGS.get(k, k): v for k, v in gps_raw.items()
+        }
         lat = _gps_to_decimal(
             gps_parsed.get("GPSLatitude"), gps_parsed.get("GPSLatitudeRef")
         )
@@ -57,12 +65,17 @@ def _extract_exif(image: Image.Image) -> Dict[str, str]:
     return exif_data
 
 
-def find_images(folder: str, extensions: Iterable[str] | None = None) -> List[str]:
+def find_images(
+    folder: str, extensions: Iterable[str] | None = None
+) -> List[str]:
     """Recursively collect image file paths within *folder*."""
     if extensions is None:
         extensions = {".jpg", ".jpeg", ".png"}
     else:
-        extensions = {e.lower() if e.startswith(".") else f".{e.lower()}" for e in extensions}
+        extensions = {
+            e.lower() if e.startswith(".") else f".{e.lower()}"
+            for e in extensions
+        }
 
     paths: List[str] = []
     for root, _, files in os.walk(folder):
@@ -86,15 +99,18 @@ def scan_folder(folder: str) -> List[Dict[str, str]]:
                 for box in boxes:
                     face_img = extract_face(img, box)
                     embedding = embedder(face_img).astype(float).tolist()
-                    faces_info.append({"box": list(box), "embedding": embedding})
+                    faces_info.append(
+                        {"box": list(box), "embedding": embedding}
+                    )
         except Exception:
             exif = {}
         entry = {
             "path": path,
             "exif": exif,
-             "faces": faces_info,
+            "faces": faces_info,
         }
         metadata.append(entry)
     return metadata
+
 
 __all__ = ["scan_folder", "find_images"]
