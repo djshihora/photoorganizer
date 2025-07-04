@@ -20,6 +20,11 @@ Run the scanner:
 ```bash
 python cli.py /path/to/photos --db photo.db
 ```
+To group photos by location, pass `--group-by` with a level such as `city`:
+
+```bash
+python cli.py /path/to/photos --db photo.db --group-by city
+```
 The resulting metadata stored in the database includes a `category` field for
 each image describing its type. If an image is classified as a document or ID,
 the text content is extracted using Tesseract (when available) and stored under

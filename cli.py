@@ -8,6 +8,8 @@ from photo_organizer.scan import scan_folder
 from photo_organizer.cluster import cluster_faces
 from photo_organizer.db import init_db, insert_metadata
 from photo_organizer.picker import pick_folder
+from photo_organizer.location import group_by_location
+import json
 
 
 def main(args: list[str] | None = None) -> int:
@@ -15,6 +17,11 @@ def main(args: list[str] | None = None) -> int:
     parser.add_argument("folder", nargs="?", help="Folder to scan for photos")
     parser.add_argument(
         "--db", default="photo.db", help="SQLite database path"
+    )
+    parser.add_argument(
+        "--group-by",
+        choices=["city", "state", "country"],
+        help="Group results by location level",
     )
 
     ns = parser.parse_args(args)
@@ -27,6 +34,9 @@ def main(args: list[str] | None = None) -> int:
     for entry in metadata:
         entry.setdefault("category", "other")
     cluster_faces(metadata)
+    if ns.group_by:
+        groups = group_by_location(metadata, level=ns.group_by)
+        print(json.dumps(groups))
     conn = init_db(ns.db)
     insert_metadata(conn, metadata)
     print(f"Inserted {len(metadata)} records into {ns.db}")
