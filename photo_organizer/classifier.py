@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List
+
 from PIL import Image
 
 # Attempt to import torch and torchvision. If unavailable, we fall back to a

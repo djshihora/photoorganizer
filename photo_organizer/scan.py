@@ -9,6 +9,7 @@ from PIL import Image, ExifTags
 from .face import detect_faces, extract_face, load_embedder
 from .classifier import classify_image
 from .ocr import extract_text
+from .location import resolve_location
 
 
 def _gps_to_decimal(
@@ -99,6 +100,15 @@ def scan_folder(folder: str) -> List[Dict[str, str]]:
         try:
             with Image.open(path) as img:
                 exif = _extract_exif(img)
+                location_info = {}
+                if "gps" in exif:
+                    try:
+                        lat_str, lon_str = exif["gps"].split(",")
+                        location_info = resolve_location(
+                            float(lat_str), float(lon_str)
+                        )
+                    except Exception:
+                        location_info = {}
                 category = classify_image(img)
                 if category in {"document", "id"}:
                     text = extract_text(img)
@@ -111,6 +121,7 @@ def scan_folder(folder: str) -> List[Dict[str, str]]:
                     )
         except Exception:
             exif = {}
+            location_info = {}
         entry = {
             "path": path,
             "exif": exif,
@@ -118,6 +129,7 @@ def scan_folder(folder: str) -> List[Dict[str, str]]:
             "category": category,
             "ocr_text": text,
         }
+        entry.update(location_info)
         metadata.append(entry)
     return metadata
 
