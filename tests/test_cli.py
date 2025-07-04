@@ -45,8 +45,7 @@ def test_cli_group_by(monkeypatch, tmp_path, capsys):
     ret = main([str(tmp_path), "--db", str(db_path), "--group-by", "city"])
     assert ret == 0
     out = capsys.readouterr().out
-    json_line = [l for l in out.splitlines() if l.startswith("{")][0]
+    json_line = [line for line in out.splitlines() if line.startswith("{")][0]
     groups = json.loads(json_line)
     assert "TestCity" in groups
     assert groups["TestCity"][0]["city"] == "TestCity"
-
