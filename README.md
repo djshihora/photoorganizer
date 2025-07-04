@@ -32,5 +32,20 @@ the `ocr_text` key.
 
 ## Testing
 
+Install the minimal dependencies for running the tests:
+
+```bash
+pip install -r dev-requirements.txt
+```
+
+Then execute the test suite with `pytest`:
+
+```bash
+pytest
+```
+
+Alternatively, run `make test` to set up a virtual environment and execute the
+suite automatically.
+
 The test suite relies only on images generated at runtime. No external image
 files are required.
