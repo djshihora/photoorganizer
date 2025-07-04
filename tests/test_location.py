@@ -12,9 +12,24 @@ def test_resolve_location_offline():
 
 def test_group_by_location():
     metadata = [
-        {"path": "a.jpg", "city": "New York", "state": "New York", "country": "United States"},
-        {"path": "b.jpg", "city": "New York", "state": "New York", "country": "United States"},
-        {"path": "c.jpg", "city": "San Francisco", "state": "California", "country": "United States"},
+        {
+            "path": "a.jpg",
+            "city": "New York",
+            "state": "New York",
+            "country": "United States",
+        },
+        {
+            "path": "b.jpg",
+            "city": "New York",
+            "state": "New York",
+            "country": "United States",
+        },
+        {
+            "path": "c.jpg",
+            "city": "San Francisco",
+            "state": "California",
+            "country": "United States",
+        },
     ]
     by_city = group_by_location(metadata, level="city")
     assert set(by_city.keys()) == {"New York", "San Francisco"}
