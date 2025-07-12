@@ -6,6 +6,14 @@ Metadata is now stored as JSON. Existing databases created with earlier
 versions may need to be recreated in order to retrieve metadata as
 dictionaries.
 
+## Prerequisites
+
+This repository contains both the Python CLI and an Electron-based user
+interface. In addition to Python 3, running the UI requires
+[Node.js](https://nodejs.org/). Any recent LTS version (18 or later) will work.
+Install it from the Node.js website or via your package manager if it's not
+already available on your system.
+
 
 ## Usage
 
@@ -42,6 +50,29 @@ The resulting metadata stored in the database includes a `category` field for
 each image describing its type. If an image is classified as a document or ID,
 the text content is extracted using Tesseract (when available) and stored under
 the `ocr_text` key.
+
+## UI
+
+The project includes an Electron-based desktop application located in the `ui`
+folder. It relies on Node.js, so ensure it is installed before continuing.
+
+Run the UI in development mode:
+
+```bash
+cd ui
+npm install
+npm run dev
+```
+
+To create a production build:
+
+```bash
+npm run build
+```
+
+The Electron code invokes `python cli.py` under the hood using Node's
+`child_process.spawn`. This means the Python CLI must be available in your
+environment for the desktop app to process photos.
 
 ## Testing
 
