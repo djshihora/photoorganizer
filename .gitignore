@@ -2,3 +2,7 @@ __pycache__/
 *.pyc
 *.pyo
 .pytest_cache/
+# Node
+ui/node_modules/
+ui/dist/
+photo_organizer.egg-info/
