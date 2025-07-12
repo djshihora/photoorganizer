@@ -47,9 +47,11 @@ def main(args: list[str] | None = None) -> int:
     if ns.group_events is not None:
         event_groups = group_by_event(metadata, gap_hours=ns.group_events)
         print(json.dumps(event_groups))
-    if ns.group_by:
+    elif ns.group_by:
         groups = group_by_location(metadata, level=ns.group_by)
         print(json.dumps(groups))
+    else:
+        print(json.dumps(metadata))
     conn = init_db(ns.db)
     insert_metadata(conn, metadata)
     print(f"Inserted {len(metadata)} records into {ns.db}")

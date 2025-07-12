@@ -24,6 +24,25 @@ def test_cli_main(tmp_path):
     assert meta["category"] in ALLOWED
 
 
+def test_cli_default_json_output(tmp_path, capsys):
+    img = Image.new("RGB", (5, 5))
+    img_path = tmp_path / "img.jpg"
+    img.save(img_path)
+    db_path = tmp_path / "photo.db"
+
+    ret = main([str(tmp_path), "--db", str(db_path)])
+    assert ret == 0
+    out = capsys.readouterr().out
+    json_line = [
+        line
+        for line in out.splitlines()
+        if line.startswith("[") or line.startswith("{")
+    ][0]
+    data = json.loads(json_line)
+    assert isinstance(data, list)
+    assert data[0]["path"].endswith("img.jpg")
+
+
 def test_cli_group_by(monkeypatch, tmp_path, capsys):
     img = Image.new("RGB", (5, 5))
     img_path = tmp_path / "img.jpg"
