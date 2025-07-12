@@ -44,7 +44,11 @@ def group_by_event(
     return events
 
 
-def name_event(event_map: Dict[int, List[Dict[str, Any]]], event_id: int, name: str) -> None:
+def name_event(
+    event_map: Dict[int, List[Dict[str, Any]]],
+    event_id: int,
+    name: str,
+) -> None:
     """Assign a human-friendly *name* to an event."""
     for entry in event_map.get(event_id, []):
         entry["event_name"] = name
