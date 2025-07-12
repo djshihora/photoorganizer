@@ -33,7 +33,11 @@ def test_cli_default_json_output(tmp_path, capsys):
     ret = main([str(tmp_path), "--db", str(db_path)])
     assert ret == 0
     out = capsys.readouterr().out
-    json_line = [line for line in out.splitlines() if line.startswith("[") or line.startswith("{")][0]
+    json_line = [
+        line
+        for line in out.splitlines()
+        if line.startswith("[") or line.startswith("{")
+    ][0]
     data = json.loads(json_line)
     assert isinstance(data, list)
     assert data[0]["path"].endswith("img.jpg")
