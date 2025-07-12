@@ -9,6 +9,7 @@ from photo_organizer.cluster import cluster_faces
 from photo_organizer.db import init_db, insert_metadata
 from photo_organizer.picker import pick_folder
 from photo_organizer.location import group_by_location
+from photo_organizer.events import group_by_event
 import json
 
 
@@ -23,6 +24,15 @@ def main(args: list[str] | None = None) -> int:
         choices=["city", "state", "country"],
         help="Group results by location level",
     )
+    parser.add_argument(
+        "--group-events",
+        nargs="?",
+        const=6,
+        default=None,
+        type=int,
+        metavar="HOURS",
+        help="Group photos into events separated by HOURS gap (default: 6)",
+    )
 
     ns = parser.parse_args(args)
 
@@ -34,6 +44,9 @@ def main(args: list[str] | None = None) -> int:
     for entry in metadata:
         entry.setdefault("category", "other")
     cluster_faces(metadata)
+    if ns.group_events is not None:
+        event_groups = group_by_event(metadata, gap_hours=ns.group_events)
+        print(json.dumps(event_groups))
     if ns.group_by:
         groups = group_by_location(metadata, level=ns.group_by)
         print(json.dumps(groups))
