@@ -64,10 +64,11 @@ def test_cli_group_by(monkeypatch, tmp_path, capsys):
     ret = main([str(tmp_path), "--db", str(db_path), "--group-by", "city"])
     assert ret == 0
     out = capsys.readouterr().out
-    json_line = [line for line in out.splitlines() if line.startswith("{")][0]
-    groups = json.loads(json_line)
-    assert "TestCity" in groups
-    assert groups["TestCity"][0]["city"] == "TestCity"
+    info = json.loads(
+        [line for line in out.splitlines() if line.startswith("{")][0]
+    )
+    assert "TestCity" in info
+    assert info["TestCity"][0]["city"] == "TestCity"
 
 
 def test_cli_group_events(monkeypatch, tmp_path, capsys):
@@ -87,9 +88,10 @@ def test_cli_group_events(monkeypatch, tmp_path, capsys):
     ret = main([str(tmp_path), "--db", str(db_path), "--group-events"])
     assert ret == 0
     out = capsys.readouterr().out
-    json_line = [line for line in out.splitlines() if line.startswith("{")][0]
-    groups = json.loads(json_line)
-    assert set(groups.keys()) == {"0", "1"}
+    info = json.loads(
+        [line for line in out.splitlines() if line.startswith("{")][0]
+    )
+    assert set(info.keys()) == {"0", "1"}
 
     conn = init_db(str(db_path))
     rows = conn.execute("SELECT metadata FROM photos").fetchall()
