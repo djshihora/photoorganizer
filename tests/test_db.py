@@ -1,6 +1,11 @@
 import json
 from PIL import Image
-from photo_organizer.db import init_db, insert_metadata
+from photo_organizer.db import (
+    init_db,
+    insert_metadata,
+    set_face_label,
+    get_face_label,
+)
 
 
 def test_insert_and_retrieve_metadata(tmp_path):
@@ -56,3 +61,13 @@ def test_insert_metadata_multiple(tmp_path):
     insert_metadata(conn, entries)
     rows = list(conn.execute("SELECT path FROM photos ORDER BY path"))
     assert [r[0] for r in rows] == [str(img1), str(img2)]
+
+
+def test_face_label_set_get(tmp_path):
+    db_file = tmp_path / "db.sqlite"
+    conn = init_db(str(db_file))
+    set_face_label(conn, 1, "Alice")
+    assert get_face_label(conn, 1) == "Alice"
+    set_face_label(conn, 1, "Bob")
+    assert get_face_label(conn, 1) == "Bob"
+    assert get_face_label(conn, 2) is None
