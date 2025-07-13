@@ -95,3 +95,18 @@ def test_cli_group_events(monkeypatch, tmp_path, capsys):
     rows = conn.execute("SELECT metadata FROM photos").fetchall()
     event_ids = {json.loads(r[0])["event_id"] for r in rows}
     assert event_ids == {0, 1}
+
+
+def test_cli_face_label(tmp_path, capsys):
+    db_path = tmp_path / "photo.db"
+    ret = main(["--db", str(db_path), "--set-face-label", "3", "Alice"])
+    assert ret == 0
+    out = capsys.readouterr().out
+    info = json.loads([l for l in out.splitlines() if l.startswith("{")][0])
+    assert info == {"cluster_id": 3, "name": "Alice"}
+
+    ret = main(["--db", str(db_path), "--get-face-label", "3"])
+    assert ret == 0
+    out = capsys.readouterr().out
+    info = json.loads([l for l in out.splitlines() if l.startswith("{")][0])
+    assert info == {"cluster_id": 3, "name": "Alice"}

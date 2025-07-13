@@ -41,6 +41,43 @@ ipcMain.handle('scan-folder', async (_evt, folder) => {
   });
 });
 
+ipcMain.handle('set-face-label', async (_evt, dbPath, clusterId, name) => {
+  return new Promise((resolve) => {
+    const script = path.join(__dirname, '..', 'cli.py');
+    const args = [
+      script,
+      '--db',
+      dbPath,
+      '--set-face-label',
+      String(clusterId),
+      name,
+    ];
+    const child = spawn('python', args);
+    let output = '';
+    child.stdout.on('data', (d) => (output += d));
+    child.stderr.on('data', (d) => console.error(d.toString()));
+    child.on('close', () => resolve(output));
+  });
+});
+
+ipcMain.handle('get-face-label', async (_evt, dbPath, clusterId) => {
+  return new Promise((resolve) => {
+    const script = path.join(__dirname, '..', 'cli.py');
+    const args = [
+      script,
+      '--db',
+      dbPath,
+      '--get-face-label',
+      String(clusterId),
+    ];
+    const child = spawn('python', args);
+    let output = '';
+    child.stdout.on('data', (d) => (output += d));
+    child.stderr.on('data', (d) => console.error(d.toString()));
+    child.on('close', () => resolve(output));
+  });
+});
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
