@@ -51,6 +51,16 @@ each image describing its type. If an image is classified as a document or ID,
 the text content is extracted using Tesseract (when available) and stored under
 the `ocr_text` key.
 
+Faces belonging to the same cluster may be labeled. Assign a label with
+`--set-face-label` and retrieve it later using `--get-face-label`:
+
+```bash
+python cli.py --db photo.db --set-face-label 0 "Alice"
+python cli.py --db photo.db --get-face-label 0
+```
+
+Labels are stored in the `face_labels` table of the SQLite database.
+
 ## UI
 
 The project includes an Electron-based desktop application located in the `ui`
