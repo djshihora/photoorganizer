@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Iterable
 
 import numpy as np
 from sklearn.cluster import DBSCAN
@@ -35,4 +35,25 @@ def cluster_faces(
     return metadata
 
 
-__all__ = ["cluster_faces"]
+def group_by_face(
+    metadata: Iterable[Dict[str, Any]]
+) -> Dict[int, List[Dict[str, Any]]]:
+    """Group metadata entries by face ``cluster_id``.
+
+    Each entry may be included in multiple groups if it contains faces from
+    different clusters. Entries without any faces labeled with a cluster ID are
+    ignored.
+    """
+
+    groups: Dict[int, List[Dict[str, Any]]] = {}
+    for entry in metadata:
+        seen: set[int] = set()
+        for face in entry.get("faces", []):
+            cid = face.get("cluster_id")
+            if isinstance(cid, int) and cid not in seen:
+                groups.setdefault(cid, []).append(entry)
+                seen.add(cid)
+    return groups
+
+
+__all__ = ["cluster_faces", "group_by_face"]
