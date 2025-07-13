@@ -38,27 +38,18 @@ def insert_metadata(
                 (entry["path"], json.dumps(entry)),
             )
 
-
-def set_face_label(conn: sqlite3.Connection, cluster_id: int, name: str) -> None:
-    """Assign *name* to a face cluster."""
+def set_face_label(
+    conn: sqlite3.Connection,
+    cluster_id: int,
+    name: str,
+) -> None:
+    """Associate a name with a face ``cluster_id`` in the database."""
     with conn:
         conn.execute(
-            "INSERT OR REPLACE INTO face_labels(cluster_id, name) VALUES (?, ?)",
+            "INSERT OR REPLACE INTO face_labels(cluster_id, name) "
+            "VALUES (?, ?)",
             (cluster_id, name),
         )
-
-
-def get_face_label(conn: sqlite3.Connection, cluster_id: int) -> str | None:
-    """Retrieve label for a face cluster."""
-    row = conn.execute(
-        "SELECT name FROM face_labels WHERE cluster_id=?", (cluster_id,)
-    ).fetchone()
-    return row[0] if row else None
-
-
-__all__ = [
-    "init_db",
-    "insert_metadata",
-    "set_face_label",
-    "get_face_label",
-]
+        
+        
+__all__ = ["init_db", "insert_metadata", "set_face_label"]
