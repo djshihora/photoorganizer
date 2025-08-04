@@ -34,7 +34,8 @@ def insert_metadata(
     with conn:
         for entry in metadata:
             conn.execute(
-                "INSERT OR REPLACE INTO photos(path, metadata) VALUES (?, ?)",
+                "INSERT OR REPLACE INTO photos(path, metadata) "
+                "VALUES (?, ?)",
                 (entry["path"], json.dumps(entry)),
             )
 

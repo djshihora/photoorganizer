@@ -65,7 +65,11 @@ def test_cli_group_by(monkeypatch, tmp_path, capsys):
     assert ret == 0
     out = capsys.readouterr().out
     info = json.loads(
-        [line for line in out.splitlines() if line.startswith("{")][0]
+        [
+            line
+            for line in out.splitlines()
+            if line.startswith("{")
+        ][0]
     )
     assert "TestCity" in info
     assert info["TestCity"][0]["city"] == "TestCity"
@@ -89,7 +93,11 @@ def test_cli_group_events(monkeypatch, tmp_path, capsys):
     assert ret == 0
     out = capsys.readouterr().out
     info = json.loads(
-        [line for line in out.splitlines() if line.startswith("{")][0]
+        [
+            line
+            for line in out.splitlines()
+            if line.startswith("{")
+        ][0]
     )
     assert set(info.keys()) == {"0", "1"}
 
