@@ -39,7 +39,6 @@ def insert_metadata(
                 (entry["path"], json.dumps(entry)),
             )
 
-
 def set_face_label(
     conn: sqlite3.Connection,
     cluster_id: int,
@@ -52,6 +51,6 @@ def set_face_label(
             "VALUES (?, ?)",
             (cluster_id, name),
         )
-
-
+        
+        
 __all__ = ["init_db", "insert_metadata", "set_face_label"]

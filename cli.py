@@ -6,7 +6,12 @@ import argparse
 
 from photo_organizer.scan import scan_folder
 from photo_organizer.cluster import cluster_faces
-from photo_organizer.db import init_db, insert_metadata
+from photo_organizer.db import (
+    init_db,
+    insert_metadata,
+    set_face_label,
+    get_face_label,
+)
 from photo_organizer.picker import pick_folder
 from photo_organizer.location import group_by_location
 from photo_organizer.events import group_by_event
@@ -33,8 +38,34 @@ def main(args: list[str] | None = None) -> int:
         metavar="HOURS",
         help="Group photos into events separated by HOURS gap (default: 6)",
     )
+    parser.add_argument(
+        "--set-face-label",
+        nargs=2,
+        metavar=("CLUSTER_ID", "NAME"),
+        help="Assign NAME to face cluster CLUSTER_ID",
+    )
+    parser.add_argument(
+        "--get-face-label",
+        type=int,
+        metavar="CLUSTER_ID",
+        help="Retrieve label for face cluster",
+    )
 
     ns = parser.parse_args(args)
+
+    if ns.set_face_label:
+        cid = int(ns.set_face_label[0])
+        name = ns.set_face_label[1]
+        conn = init_db(ns.db)
+        set_face_label(conn, cid, name)
+        print(json.dumps({"cluster_id": cid, "name": name}))
+        return 0
+
+    if ns.get_face_label is not None:
+        conn = init_db(ns.db)
+        name = get_face_label(conn, ns.get_face_label)
+        print(json.dumps({"cluster_id": ns.get_face_label, "name": name}))
+        return 0
 
     folder = ns.folder or pick_folder()
     print(f"Scanning {folder}...")
