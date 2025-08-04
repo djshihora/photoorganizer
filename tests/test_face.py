@@ -5,7 +5,25 @@ from photo_organizer.face import (
     load_embedder,
     FaceEmbedder,
 )
-import onnxruntime as ort
+
+# ``onnxruntime`` is an optional dependency.  The tests only need the module
+# object so that ``monkeypatch`` can replace ``InferenceSession``; provide a
+# minimal stub when the real package is not installed.
+try:  # pragma: no cover - optional dependency
+    import onnxruntime as ort
+except Exception:  # pragma: no cover - handled gracefully
+    class _DummyORT:
+        class InferenceSession:  # pragma: no cover - test stub
+            def __init__(self, *_, **__):
+                pass
+
+            def get_inputs(self):
+                return [type("I", (), {"name": "input"})()]
+
+            def run(self, *_args, **_kwargs):
+                return [[0] * 128]
+
+    ort = _DummyORT()
 
 
 def test_detect_and_embed():
